@@ -1,0 +1,6 @@
+{
+  "name": "lazy-lottie-player",
+  "scripts": {
+    "dev": "npx -y serve -C"
+  }
+}
