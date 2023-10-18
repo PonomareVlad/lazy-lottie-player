@@ -12,9 +12,8 @@ export class LazyLottiePlayer extends HTMLElement {
     static lottiePlayerTag = "lottie-player"
     static lottiePlayerURL = "https://unpkg.com/@lottiefiles/lottie-player@2.0.2/dist/lottie-player.js"
 
-    activationPromise = new Promise(resolve => this.resolveActivation = resolve);
-
     shadowRoot = this.attachShadow({mode: "open"})
+    activationPromise = new Promise(resolve => this.resolveActivation = resolve);
 
     preloader = document.createElement("slot")
     lottiePlayer = document.createElement(this.constructor.lottiePlayerTag)
@@ -22,15 +21,13 @@ export class LazyLottiePlayer extends HTMLElement {
         innerHTML: getStyles(this.constructor.lottiePlayerTag)
     })
 
-    static loadLottiePlayer = () => import(this.lottiePlayerURL)
-
     static define(tag = "lazy-lottie-player") {
         customElements.define(tag, this)
     }
 
     connectedCallback() {
-        this.lottiePlayer.setAttribute("src", this.getAttribute("src"));
         this.lottiePlayer.addEventListener("ready", this.activate.bind(this))
+        this.lottiePlayer.setAttribute("src", this.getAttribute("src"));
         this.lottiePlayer.toggleAttribute("disableCheck", true)
         this.shadowRoot.replaceChildren(
             this.lottiePlayer,
@@ -41,8 +38,7 @@ export class LazyLottiePlayer extends HTMLElement {
 
     prepare() {
         const {lottiePlayerTag} = this.constructor;
-        this.lottiePlayer.setAttribute("src", this.getAttribute("src"));
-        if (!customElements.get(lottiePlayerTag)) void this.constructor.loadLottiePlayer();
+        if (!customElements.get(lottiePlayerTag)) void import(this.constructor.lottiePlayerURL);
         return this.activationPromise;
     }
 
@@ -54,13 +50,17 @@ export class LazyLottiePlayer extends HTMLElement {
     }
 
     async play() {
+        this.paused = false;
         if (!this.active) await this.prepare();
+        if (this.paused) return;
         this.lottiePlayer.setLooping(true);
         this.lottiePlayer.play();
     }
 
     pause() {
-        if (this.active) this.lottiePlayer.setLooping(false);
+        this.paused = true;
+        if (!this.active) return;
+        this.lottiePlayer.setLooping(false);
     }
 
 }
