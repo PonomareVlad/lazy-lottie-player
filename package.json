@@ -1,5 +1,17 @@
 {
+  "license": "MIT",
+  "version": "0.0.1",
   "name": "lazy-lottie-player",
+  "funding": "https://PonomareVlad.ru/donate",
+  "homepage": "https://github.com/PonomareVlad/lazy-lottie-player#readme",
+  "author": "Vladislav Ponomarev <PonomareVlad@users.noreply.github.com> (https://PonomareVlad.ru)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PonomareVlad/lazy-lottie-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PonomareVlad/lazy-lottie-player/issues"
+  },
   "scripts": {
     "dev": "npx -y serve -C"
   }
